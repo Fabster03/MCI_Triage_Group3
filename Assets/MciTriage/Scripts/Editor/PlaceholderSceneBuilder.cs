@@ -209,6 +209,15 @@ namespace MciTriage.EditorTools
             toPlayer.y = 0;
             root.transform.rotation = Quaternion.LookRotation(toPlayer.sqrMagnitude > 1e-4f ? toPlayer.normalized : -frame.Along);
 
+            // Real character model available for this patient? Then use it instead of the capsule.
+            var characterPrefab = PatientModelSetup.TryGetPrefab(data.patientId);
+            if (characterPrefab != null)
+            {
+                var avatar = root.AddComponent<PatientAvatar>();
+                PatientModelSetup.CreateCharacterBody(root.transform, avatar, controller, data, characterPrefab, tagMat);
+                return;
+            }
+
             var body = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             body.name = "Body";
             body.transform.SetParent(root.transform, false);

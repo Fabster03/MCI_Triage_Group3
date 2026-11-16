@@ -115,6 +115,13 @@ namespace MciTriage.Runtime
             if (value == null) { SetStatus("Scenario not running."); return; }
             _assessmentResults[type].text = FormatAssessment(type, value);
             SetStatus("");
+
+            // Walking patients show it: the panel closes, the patient walks a few steps and the panel reopens.
+            if (type == AssessmentType.Ambulation && value == "yes" && _avatar.CanDemonstrateWalk)
+            {
+                Close();
+                _avatar.DemonstrateWalk(() => { if (_open == null) Open(); });
+            }
         }
 
         private void OnIntervene(InterventionType type)
