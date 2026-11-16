@@ -1,0 +1,16 @@
+{
+    "name": "MciTriage.Runtime",
+    "rootNamespace": "MciTriage.Runtime",
+    "references": [
+        "MciTriage.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4536f6111f7f4df4b6c9dfdf61971bfe, type: 3}
+  m_Name: TunnelBusCrash
+  m_EditorClassIdentifier: 
+  scenarioId: tunnel_bus_crash
+  displayName: Bus accident in road tunnel
+  briefing: 'A coach collided with a passenger car in a road tunnel. You are the first
+    paramedic on scene. Triage all casualties using START before additional resources arrive.'
+  timeLimitSeconds: 300
+  patients:
+  - {fileID: 11400000, guid: 7e7af8970a1142e3963503e6bcece5e4, type: 2}
+  - {fileID: 11400000, guid: c9568647bbc748b3ba80614c6524482a, type: 2}
+  - {fileID: 11400000, guid: 7ffbec74b4364e5fb19e27a182f9e9a7, type: 2}
+  - {fileID: 11400000, guid: 942497d2c0dc411ca9fe7f757bb72cd5, type: 2}
+  - {fileID: 11400000, guid: 8061295f31f94fcaba768eb3f5c04cc8, type: 2}

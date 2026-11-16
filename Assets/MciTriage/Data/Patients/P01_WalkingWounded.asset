@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e875889a1f943f198294acb4149835a, type: 3}
+  m_Name: P01_WalkingWounded
+  m_EditorClassIdentifier: 
+  patientId: P01
+  displayName: Patient 1
+  description: 'Male, approx. 35. Walking around near the bus, heavily bleeding scalp laceration, face covered in blood, agitated.'
+  initialFindings:
+    canWalk: 1
+    isBreathing: 1
+    breathesAfterAirwayRepositioning: 0
+    respiratoryRate: 18
+    hasRadialPulse: 1
+    capillaryRefillSeconds: 1.5
+    followsCommands: 1
+    heartRate: 96
+    oxygenSaturation: 98
+  stateChanges: []
