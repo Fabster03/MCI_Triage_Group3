@@ -39,6 +39,8 @@ namespace MciTriage.Runtime
 
         public bool IsRunning => Session != null && Session.IsRunning;
 
+        public ScenarioData ScenarioAsset => scenario;
+
         private void Start()
         {
             if (startOnPlay) StartScenario();

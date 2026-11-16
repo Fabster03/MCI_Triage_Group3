@@ -175,6 +175,9 @@ namespace MciTriage.Core
 
         public TriageCategory GetAssignedCategory(string patientId) => GetRuntime(patientId).Assigned;
 
+        /// <summary>True once the airway of this patient has been repositioned (affects visible breathing).</summary>
+        public bool IsAirwayOpened(string patientId) => GetRuntime(patientId).AirwayOpened;
+
         /// <summary>Ground-truth findings right now (for UI such as avatars/animations, not for the trainee's card).</summary>
         public PatientFindings GetCurrentFindings(string patientId) => CurrentFindings(GetRuntime(patientId));
 

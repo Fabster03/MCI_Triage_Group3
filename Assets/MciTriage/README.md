@@ -29,6 +29,19 @@ deshalb später neu auswerten, auch wenn sich Bewertungsregeln ändern.
 3. Am Ende landen `*_events.csv` und `*_report.txt` in
    `Application.persistentDataPath/MciTriageLogs` (Windows: `%USERPROFILE%\AppData\LocalLow\<Company>\<Product>\`).
 
+## Platzhalter-Szene
+
+Menü **MCI Triage → Build Placeholder Incident** baut in der offenen Szene das Objekt `MCI_Incident`:
+ScenarioController, Einsatz-Tafel (Briefing, START/FINISH, Timer, Report), Bus + PKW (Quader)
+und 5 Patienten-Kapseln mit `PatientAvatar`. Erneutes Ausführen ersetzt `MCI_Incident` komplett –
+manuelle Änderungen darunter gehen dabei verloren.
+
+- `PatientAvatar` überträgt die Befunde auf die Darstellung (stehen/liegen, Atembewegung, Hautfarbe,
+  Triage-Karte). Für echte Figuren wird nur `ApplyVisuals` auf Animator-Parameter umgestellt.
+- `PatientPanel` ist das Untersuchungsmenü (öffnet per „Examine“-Button oder Grip auf die Kapsel).
+- UI wird zur Laufzeit per Code erzeugt (`UiKit`), daher im Editor erst im Play-Mode sichtbar.
+- PlayMode-Smoke-Test (`Tests/PlayMode`) startet die MainScene und spielt einen Kurzdurchlauf über die Buttons.
+
 ## Bewertungsregeln (Kurzfassung)
 
 - Referenz = START-Kategorie **zum Zeitpunkt der letzten Zuweisung** (Patienten können sich verschlechtern).
