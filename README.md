@@ -21,12 +21,42 @@ Am Ende wertet das System die Entscheidungen gegen eine deterministische START-R
 2. Unity Hub → **Add → Add project from disk** → Repo-Ordner wählen → öffnen.
    Der erste Import dauert einige Minuten (der `Library`-Ordner wird lokal neu aufgebaut).
 3. `Assets/Scenes/MainScene` öffnen → **Play**.
-4. In VR: mit dem Controller-Strahl auf **START** an der Tafel zielen und den Trigger drücken. Dann zu den Patienten
+4. Mit dem Controller-Strahl auf **START** an der Tafel zielen und den Trigger drücken. Dann zu den Patienten
    gehen, **Examine** anklicken (oder per Grip auf die Kapsel greifen), untersuchen und Triage-Karte vergeben.
    **FINISH** beendet das Szenario und zeigt die Auswertung.
 
-> Ohne Headset startet die Szene auch, aber die Kamera ist fest. Zum Testen ohne Brille wird der
-> *XR Device Simulator* benötigt (Package Manager → XR Interaction Toolkit → Samples) – noch nicht eingerichtet.
+### Testen ohne VR-Brille (XR Interaction Simulator)
+
+Ist beim Drücken auf Play **keine Brille verbunden**, startet automatisch der *XR Interaction Simulator*
+(nur im Editor, nicht im Build). Er simuliert Headset und Controller mit Maus und Tastatur – man testet also
+genau dieselbe Interaktion wie später in VR. Unten links im Game-Fenster blendet er eine Tastenübersicht ein.
+
+| Aktion | Taste |
+|---|---|
+| Laufen vor / zurück / seitlich | **W / S / A / D** |
+| Hoch / runter | **E / Q** |
+| Umsehen | **rechte Maustaste halten** + Maus bewegen |
+| Zwischen Kopf, linkem und rechtem Controller wechseln | **Tab** |
+| Controller-Strahl zielen | Controller per **Tab** wählen, dann Maus bewegen |
+| **Trigger** (Buttons klicken) | **T** |
+| **Grip** (Patienten-Kapsel greifen → Menü öffnet sich) | **G** |
+| Position / Ansicht zurücksetzen | **R** |
+
+**Typischer Testablauf:** Tab bis der rechte Controller aktiv ist → Strahl auf **START** → **T** →
+mit WASD zu einem Patienten → Strahl auf **Examine** → **T** → Untersuchungen und Triage-Farbe jeweils mit **T** anklicken →
+zurück zur Tafel → **FINISH** → Report lesen.
+
+> Die Tasten beziehen sich auf die Position auf einer **englischen** Tastatur. Auf deutschen Tastaturen sind
+> u. a. **Y und Z vertauscht**; WASD, T, G, Tab und R passen.
+>
+> Einstellung: `Assets/XRI/Settings/Resources/XRDeviceSimulatorSettings.asset`
+> (*Project Settings → XR Plug-in Management → XR Interaction Toolkit*). Das Sample liegt unter
+> `Assets/Samples/XR Interaction Toolkit/3.3.2/XR Interaction Simulator/`.
+
+### Mit Meta Quest
+
+Quest per **Link** (Kabel) oder **Air Link** mit dem PC verbinden (Meta-Quest-Link-App muss laufen, in der Brille
+Link aktivieren), dann in Unity **Play**. Der Simulator startet in dem Fall nicht.
 
 ---
 
@@ -37,6 +67,7 @@ Am Ende wertet das System die Entscheidungen gegen eine deterministische START-R
 | `29cbcfd` | **Triage-Logik:** Patientenmodell, START-Engine, Szenario-Session mit Timer, Event-Log, Auswertung, Beispielszenario, 30 Unit-Tests |
 | `4fa8744` | Automatische Unity-6.3-Upgrades (Materialien/Settings) – keine inhaltlichen Änderungen |
 | `8e4e68d` | **Platzhalter-Szene:** Bus + PKW, 5 Patienten-Kapseln, Untersuchungsmenü, Triage-Karten, Einsatz-Tafel mit Timer und Report, PlayMode-Test |
+| *neu* | **Testen ohne Brille:** XR Interaction Simulator; **Tunnel-Collider aktiviert** (vorher fiel man durch den Boden); alte `Main Camera` deaktiviert |
 
 Alles Projekteigene liegt unter **`Assets/MciTriage/`**. Details zur internen Struktur:
 [`Assets/MciTriage/README.md`](Assets/MciTriage/README.md).
@@ -119,6 +150,10 @@ Unity → *Window → General → Test Runner*
 - **Merge-Konflikte in Szenen** lassen sich kaum auflösen → absprechen, wer gerade an `MainScene.unity` arbeitet.
 - **Nur über Unity verschieben/umbenennen**, nicht im Explorer – sonst passen die `.meta`-Dateien nicht mehr.
 - **Assets** (Mixamo-Modelle, Animationen) unter `Assets/MciTriage/Art/` ablegen; keine ZIPs committen.
+- **Tunnel-Collider nicht deaktivieren:** Die drei Box Collider an `DasTunnelAsset` sind Boden und Wände – ohne sie
+  fällt das XR-Rig durch den Boden. Der Mesh Collider bleibt aus (*Convex* würde den Tunnel als Block füllen).
+- **„Modified“-Dateien ohne Inhalt:** Unity speichert Dateien mit anderen Zeilenenden (LF statt CRLF). Zeigt
+  `git diff` für eine Datei nichts an, ist es nur das – mit `git restore <datei>` zurücksetzen oder ignorieren.
 
 ---
 
@@ -136,12 +171,15 @@ Unity → *Window → General → Test Runner*
 
 ## Offene Punkte / nächste Schritte
 
-- [ ] Test mit Headset: Controller-Strahlen ↔ Buttons, Lesbarkeit, Wege im Tunnel
-- [ ] Alte `Main Camera` in der `MainScene` entfernen (doppelte Kamera / 2 Audio Listener neben dem XR-Rig)
+- [x] Interaktion im Simulator getestet (Laufen, Buttons per Strahl, Triage, Report)
+- [ ] Test mit echtem Headset: Lesbarkeit, Wege im Tunnel, Bedienkomfort
+- [x] Alte `Main Camera` deaktiviert (ggf. ganz löschen)
+- [x] Tunnel-Collider (Boden + Wände) aktiviert
 - [ ] Mixamo-Figuren + Animator statt Kapseln (`PatientAvatar.ApplyVisuals` umstellen)
 - [ ] Grafisches Ergebnis-Dashboard (Debriefing)
 - [ ] Patientenwerte fachlich prüfen / mit Quelle belegen
 - [ ] Teilnehmer-ID vor Start eingeben (für die Evaluation)
 - [ ] NASA-TLX- und Usability-Fragebogen
-- [ ] Optional: XR Device Simulator zum Testen ohne Brille
+- [x] XR Interaction Simulator zum Testen ohne Brille
+- [ ] `.gitattributes` für Unity (verhindert Phantom-Änderungen durch Zeilenenden LF/CRLF)
 - [ ] Aufräumen: `quick-tunnel.zip` und `quick-tunnel/` im Root sind Duplikate von `Assets/Tunnel/`
