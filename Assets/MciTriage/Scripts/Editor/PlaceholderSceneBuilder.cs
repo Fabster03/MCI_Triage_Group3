@@ -46,8 +46,22 @@ namespace MciTriage.EditorTools
                 return;
             }
 
+            // Rebuilding replaces MCI_Incident, but the hand-placed vehicle models (incl. crash deformation)
+            // are kept: the existing "Vehicles" group is detached first and re-attached afterwards.
             var old = GameObject.Find(RootName);
-            if (old != null) Undo.DestroyObjectImmediate(old);
+            Transform keptVehicles = null;
+            if (old != null)
+            {
+                if (!Application.isBatchMode && !EditorUtility.DisplayDialog("Rebuild MCI incident?",
+                        $"'{RootName}' will be rebuilt (scenario controller, board, patients).\n" +
+                        "The 'Vehicles' group is kept. Manual changes to patients and board are lost.",
+                        "Rebuild", "Cancel"))
+                    return;
+
+                keptVehicles = old.transform.Find("Vehicles");
+                if (keptVehicles != null) Undo.SetTransformParent(keptVehicles, null, "Keep vehicles");
+                Undo.DestroyObjectImmediate(old);
+            }
 
             var frame = ComputeFrame();
             var root = new GameObject(RootName);
@@ -62,13 +76,18 @@ namespace MciTriage.EditorTools
             so.FindProperty("startOnPlay").boolValue = false;
             so.ApplyModifiedPropertiesWithoutUndo();
 
-            // Vehicles: coach and passenger car after a frontal collision.
-            var vehicles = new GameObject("Vehicles");
-            vehicles.transform.SetParent(root.transform, false);
-            CreateVehicle(vehicles.transform, "Vehicle_Bus", frame, new Vector2(7.5f, -1.4f), 6f,
-                new Vector3(2.55f, 3.2f, 11.5f), Mat("Mat_Bus", new Color(0.95f, 0.75f, 0.2f)));
-            CreateVehicle(vehicles.transform, "Vehicle_Car", frame, new Vector2(0.4f, -0.6f), 28f,
-                new Vector3(1.8f, 1.45f, 4.3f), Mat("Mat_Car", new Color(0.2f, 0.35f, 0.75f)));
+            // Vehicles: the real bus/car models are placed by hand under "Vehicles" and survive rebuilds.
+            if (keptVehicles != null)
+            {
+                Undo.SetTransformParent(keptVehicles, root.transform, "Keep vehicles");
+                keptVehicles.SetSiblingIndex(1);
+            }
+            else
+            {
+                var vehicles = new GameObject("Vehicles");
+                vehicles.transform.SetParent(root.transform, false);
+                Debug.LogWarning("[MCI] No vehicles found - add the bus and car models under MCI_Incident/Vehicles.");
+            }
 
             // Patients.
             var patientsRoot = new GameObject("Patients");
@@ -186,18 +205,6 @@ namespace MciTriage.EditorTools
         }
 
         // ------------------------------------------------------------------ objects
-
-        private static void CreateVehicle(Transform parent, string name, Frame frame, Vector2 spot, float yawDegrees,
-            Vector3 size, Material material)
-        {
-            var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            go.name = name;
-            go.transform.SetParent(parent, false);
-            go.transform.position = frame.At(spot) + Vector3.up * (size.y / 2f);
-            go.transform.rotation = Quaternion.LookRotation(frame.Along) * Quaternion.Euler(0, yawDegrees, 0);
-            go.transform.localScale = size;
-            go.GetComponent<Renderer>().sharedMaterial = material;
-        }
 
         private static void CreatePatient(Transform parent, PatientData data, ScenarioController controller, Frame frame,
             Vector2 spot, Material bodyMat, Material tagMat)

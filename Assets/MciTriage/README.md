@@ -32,9 +32,12 @@ deshalb später neu auswerten, auch wenn sich Bewertungsregeln ändern.
 ## Platzhalter-Szene
 
 Menü **MCI Triage → Build Placeholder Incident** baut in der offenen Szene das Objekt `MCI_Incident`:
-ScenarioController, Einsatz-Tafel (Briefing, START/FINISH, Timer, Report), Bus + PKW (Quader)
-und 5 Patienten-Kapseln mit `PatientAvatar`. Erneutes Ausführen ersetzt `MCI_Incident` komplett –
-manuelle Änderungen darunter gehen dabei verloren.
+ScenarioController, Einsatz-Tafel (Briefing, START/FINISH, Timer, Report) und die 5 Patienten mit
+`PatientAvatar` (Kapsel bzw. Charaktermodell, falls vorhanden). Erneutes Ausführen fragt nach und baut alles neu –
+**außer der Gruppe `Vehicles`** (Bus- und PKW-Modelle inkl. Deformation), die erhalten bleibt.
+
+Menü **MCI Triage → Apply Crash Deformation** (`Scripts/Editor/CrashDeformationBuilder.cs`) erzeugt die
+Unfallschäden an Bus und PKW mit dem Deform-Package (Details in der Haupt-README).
 
 - `PatientAvatar` überträgt die Befunde auf die Darstellung (stehen/liegen, Atembewegung, Hautfarbe,
   Triage-Karte). Für echte Figuren wird nur `ApplyVisuals` auf Animator-Parameter umgestellt.

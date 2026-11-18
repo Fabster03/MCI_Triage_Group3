@@ -5,7 +5,8 @@
         "MciTriage.Core",
         "MciTriage.Runtime",
         "Unity.XR.Interaction.Toolkit",
-        "Unity.XR.CoreUtils"
+        "Unity.XR.CoreUtils",
+        "Deform"
     ],
     "includePlatforms": [
         "Editor"
